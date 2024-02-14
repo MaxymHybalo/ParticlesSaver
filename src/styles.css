@@ -1,6 +1,11 @@
+body, html {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
 .canvas {
   border: 1px solid #22078f63;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background-color: #000;
 }
