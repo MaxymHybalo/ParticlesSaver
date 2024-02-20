@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <canvas id="canvas" class="canvas"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
-
-    <script src="main.js"></script>
+    <!-- <canvas id="canvas" class="canvas"></canvas> -->
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@v0.161.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@v0.161.0/examples/jsm/"
+          }
+        }
+      </script>
+    <script type="module" src="main_tree.js"></script>
 </body>
 </html>
