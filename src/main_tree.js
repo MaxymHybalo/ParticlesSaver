@@ -2,39 +2,74 @@ import * as THREE from 'three';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-const scene = new THREE.Scene();
+import cfg from './config';
+import Particle from './particle';
 
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const particles = [];
+
+const params = {
+    threshold: 0,
+    strength: 1,
+    radius: 0.5,
+    exposure: 1
+};
 
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-const rednerScene = new RenderPass(scene, camera);
 const composer = new EffectComposer(renderer);
-composer.addPass(rednerScene);
-const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1.6,
-    0.1,
-    0.1)
-composer.addPass(bloomPass);
-document.body.appendChild( renderer.domElement );
+const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
 
-const geometry = new THREE.SphereGeometry(1, 16, 8); // adjust sphere
-const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
-const cube = new THREE.Mesh(geometry, material);
-const light = new THREE.AmbientLight( 0x404040 ); // soft white light
-scene.add(light);
-scene.add(cube);
+bloomPass.threshold = params.threshold;
+bloomPass.strength = params.strength;
+bloomPass.radius = params.radius;
+bloomPass.radius = 0.7
+function createParticles() {
+    console.log('pool', cfg.pool);
+    for(let i = 0; i < cfg.pool; i++) {
+        particles.push(
+            new Particle(0, 0, 0)
+        );
+    }
+}
+export function init() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    const rednerScene = new RenderPass(scene, camera);
+    // const composer = new EffectComposer(renderer);
+    composer.addPass(rednerScene);
 
-camera.position.z = 35;
+    composer.addPass(bloomPass);
+    document.body.appendChild(renderer.domElement);
+
+    createParticles();
+    particles.forEach(p => {
+        scene.add(p.sphere)
+        // scene.add(p.light);
+    });
+
+    camera.position.z = 25;
+    
+    // return {
+    //     composer
+    // }
+}
 
 export function animate() {
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
 
-    cube.rotation.x += 0.01;
-    cube.position.x +=0.1
+    particles.forEach(p => p.update());
+    
+    const { strength, threshold, radius, resolution } = window.global.bloom;
+    bloomPass.strength = strength;
+    bloomPass.threshold = threshold;
+    bloomPass.radius = radius;
+    bloomPass.resolution = resolution;
+
     // renderer.render(scene, camera);
-    composer.render()
+    composer.render();
+
+    // console.log(particles);
 }
 
 // animate();

@@ -28,6 +28,9 @@ const SETTINGS = {
         color: 'red',
         blur: 15
     },
+    events: {
+        animate: true
+    }
     // _speed: {
     //     dx: Math.random(),
     //     dy: Math.random()

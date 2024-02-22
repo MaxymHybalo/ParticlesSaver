@@ -5,7 +5,7 @@ const webpack = require("webpack");
 module.exports = {
     mode: 'development',
     devtool: 'cheap-module-source-map',
-    entry: './src/index.js',
+    entry: './src/test.js',
     output: {
         filename: 'build.js',
         path: path.resolve(__dirname, 'dist'),
