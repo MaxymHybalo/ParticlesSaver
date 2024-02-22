@@ -23,12 +23,12 @@ const geometry = new THREE.SphereGeometry(1, 16, 8); // adjust sphere
 const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
 const cube = new THREE.Mesh(geometry, material);
 const light = new THREE.AmbientLight( 0x404040 ); // soft white light
-scene.add( light );
+scene.add(light);
 scene.add(cube);
 
 camera.position.z = 35;
 
-function animate() {
+export function animate() {
     requestAnimationFrame( animate );
 
     cube.rotation.x += 0.01;
@@ -37,4 +37,4 @@ function animate() {
     composer.render()
 }
 
-animate();
+// animate();
